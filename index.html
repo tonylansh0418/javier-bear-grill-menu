@@ -2,8 +2,17 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🔥 Javier Bear Grill 🔥</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1a0800">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="Menú oficial de Javier Bear Grill. Hamburguesas smash, pollo crujiente, combos y delivery en La Chorrera, Panamá.">
+<meta property="og:title" content="Javier Bear Grill | Menú oficial">
+<meta property="og:description" content="Smash burgers, pollo crujiente y combos para delivery en La Chorrera.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://menujaviergrill.store/">
+<title>Javier Bear Grill | Menú oficial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -271,6 +280,194 @@
   .zona-btn-del:hover { background:rgba(200,16,46,0.25); }
   .zona-wa-label { width:76px; text-align:center; font-size:10px; color:var(--muted); padding:6px 4px; flex-shrink:0; }
   .zona-fuera-note { font-size:10px; color:var(--muted); margin-top:4px; margin-left:52px; }
+
+  /* ══════════════════════════════════════════
+     JBG MENU 2.0 — UI / MOBILE OPTIMIZATION
+     ══════════════════════════════════════════ */
+  html { scroll-behavior:smooth; background:var(--bg); }
+  body {
+    background:
+      radial-gradient(circle at 50% -120px, rgba(255,135,50,0.12), transparent 360px),
+      var(--bg);
+    padding-bottom:110px;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  button, input, select { -webkit-tap-highlight-color:transparent; }
+  button:focus-visible, input:focus-visible, select:focus-visible {
+    outline:2px solid var(--yellow);
+    outline-offset:2px;
+  }
+
+  #scheduleBar {
+    min-height:44px;
+    padding:9px 12px;
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    box-shadow:0 4px 18px rgba(0,0,0,0.18);
+  }
+
+  #hero { background:#120500; max-height:540px; }
+  #heroImg { aspect-ratio:16/10 !important; max-height:540px; }
+  .hero-shade {
+    position:absolute; inset:0;
+    background:linear-gradient(180deg,rgba(0,0,0,0.18) 0%,rgba(12,3,0,0.48) 45%,rgba(12,3,0,0.86) 100%);
+  }
+  .hero-kicker {
+    display:inline-flex; align-items:center; gap:6px;
+    padding:5px 10px; margin-bottom:10px;
+    border:1px solid rgba(255,255,255,0.22);
+    border-radius:999px; background:rgba(0,0,0,0.28);
+    color:rgba(255,255,255,0.86); font-size:10px; font-weight:800;
+    letter-spacing:1.2px; text-transform:uppercase;
+    backdrop-filter:blur(6px);
+  }
+  #heroPrice { animation:none !important; text-shadow:0 4px 24px rgba(255,135,50,0.45) !important; }
+
+  .trust-strip {
+    display:flex; gap:8px; overflow-x:auto;
+    padding:10px 12px 9px; scrollbar-width:none;
+    background:linear-gradient(180deg,rgba(58,26,0,0.72),rgba(26,8,0,0.94));
+    border-bottom:1px solid var(--border);
+  }
+  .trust-strip::-webkit-scrollbar { display:none; }
+  .trust-chip {
+    flex:0 0 auto; display:flex; align-items:center; gap:6px;
+    padding:7px 10px; border-radius:999px;
+    background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07);
+    color:#d9c7b7; font-size:10px; font-weight:700; white-space:nowrap;
+  }
+
+  #searchWrap {
+    top:44px;
+    padding:10px 12px 8px;
+    background:rgba(26,8,0,0.94);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    box-shadow:0 8px 22px rgba(0,0,0,0.18);
+  }
+  .search-container { max-width:1180px; margin:0 auto; }
+  #searchInput {
+    min-height:44px; padding:11px 16px 11px 40px;
+    background:rgba(42,18,0,0.95);
+    border-color:#5c310c;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.025);
+  }
+  #catNav {
+    max-width:1180px; margin:0 auto;
+    padding:8px 0 1px;
+  }
+  .cat-pill {
+    min-height:34px; padding:7px 13px;
+    font-size:11px; border-color:#5c310c;
+  }
+
+  .category-block {
+    max-width:1180px;
+    margin:10px 12px;
+    border-radius:14px;
+    border-color:#512a0a;
+    box-shadow:0 8px 28px rgba(0,0,0,0.12);
+  }
+  .category-toggle {
+    padding:14px 16px;
+    font-size:17px;
+    letter-spacing:.25px;
+  }
+  .category-body { padding:10px; gap:10px; }
+
+  .card {
+    border-radius:13px;
+    border-color:#512a0a;
+    box-shadow:0 3px 14px rgba(0,0,0,0.10);
+  }
+  .card:hover { border-color:#7a4216; }
+  .card-name {
+    font-size:15px; line-height:1.25;
+    white-space:normal;
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
+  }
+  .card-price { font-size:18px; }
+  .card-desc { font-size:11.5px; line-height:1.4; color:#b98a63; }
+  .card.has-img .img-wrap { aspect-ratio:4/3; }
+  .card.has-img .card-bottom { padding:11px 12px 12px; }
+  .qty-controls { height:34px; }
+  .qty-btn { width:34px; height:34px; font-size:18px; }
+  .qty-val { width:28px; }
+
+  #carrito {
+    max-width:760px; margin-left:auto; margin-right:auto;
+    border-radius:18px; border-color:#5c310c;
+    box-shadow:0 18px 48px rgba(0,0,0,0.18);
+  }
+
+  #floatCart {
+    left:12px; right:12px; bottom:max(12px, env(safe-area-inset-bottom));
+    width:auto; max-width:520px; margin:0 auto;
+    min-height:54px; padding:11px 16px;
+    border-radius:17px;
+    display:flex; align-items:center; justify-content:space-between; gap:14px;
+    box-shadow:0 12px 36px rgba(0,0,0,0.44);
+  }
+  #floatCart.has-items { box-shadow:0 12px 38px rgba(255,135,50,0.28),0 8px 26px rgba(0,0,0,0.38); }
+  .float-cart-main { display:flex; align-items:center; gap:8px; }
+  .float-cart-count {
+    min-width:24px; height:24px; padding:0 7px;
+    display:inline-flex; align-items:center; justify-content:center;
+    border-radius:999px; background:#1a0800; color:#fff;
+    font-family:'Nunito'; font-size:12px; font-weight:800;
+  }
+  .float-cart-total { font-size:18px; white-space:nowrap; }
+
+  #footer {
+    padding-bottom:calc(44px + env(safe-area-inset-bottom));
+    background:linear-gradient(180deg,#160700,#0d0300);
+  }
+  .footer-hours { color:#8d6c51; line-height:1.55; }
+  #footerCredit { color:#5e4636; }
+
+  @media (max-width:539px) {
+    #hero { max-height:500px; }
+    #heroImg { aspect-ratio:4/5 !important; max-height:500px; }
+    .category-block { margin:9px 8px; }
+    .category-body { padding:8px; }
+    .card.has-img {
+      min-height:126px;
+      flex-direction:row;
+      align-items:stretch;
+    }
+    .card.has-img .img-wrap {
+      width:124px; min-width:124px; min-height:126px;
+      aspect-ratio:auto;
+      border-right:1px solid var(--border);
+    }
+    .card.has-img .card-bottom {
+      flex:1; padding:11px;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:space-between;
+    }
+    .card.has-img .qty-controls { align-self:flex-end; }
+    .card.has-img .card-desc { -webkit-line-clamp:2; }
+    .card:not(.has-img) { padding:13px; }
+    .modal-content { padding-bottom:calc(20px + env(safe-area-inset-bottom)); }
+  }
+
+  @media (min-width:900px) {
+    #hero { max-width:1180px; margin:0 auto; border-radius:0 0 22px 22px; overflow:hidden; }
+    .category-block { margin:12px auto; }
+    #carrito { margin-top:28px; }
+  }
+
+  @media (prefers-reduced-motion:reduce) {
+    *, *::before, *::after {
+      animation-duration:.01ms !important;
+      animation-iteration-count:1 !important;
+      scroll-behavior:auto !important;
+      transition-duration:.01ms !important;
+    }
+  }
+
 </style>
 </head>
 <body>
@@ -290,33 +487,39 @@
   <span itemprop="telephone" style="display:none">+507 6573-8924</span>
   <span itemprop="servesCuisine" style="display:none">Hamburguesas, Pollo, Parrilla, Combos</span>
   <img id="heroImg" src="" alt="" style="width:100%;aspect-ratio:1/1;object-fit:cover;display:block;opacity:0;transition:opacity 0.6s ease;">
-  <div style="position:absolute;inset:0;background:rgba(0,0,0,0.52);"></div>
+  <div class="hero-shade"></div>
   <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px;text-align:center;">
-    <h1 style="font-family:'Oswald';font-size:clamp(24px,7vw,36px);color:#fff;font-weight:700;margin-bottom:10px;text-shadow:0 2px 16px rgba(0,0,0,0.9);line-height:1.2;">¿Hambre? Estás en el lugar correcto 🐻🔥</h1>
-    <p style="font-size:clamp(12px,3.5vw,15px);color:rgba(255,255,255,0.85);margin-bottom:6px;line-height:1.5;text-shadow:0 1px 8px rgba(0,0,0,0.8);">Bienvenido al menú de <strong>Javier Bear Grill</strong>, tu restaurante de hamburguesas y parrilla en La Chorrera, Panamá.</p>
-    <p style="font-size:clamp(11px,3vw,13px);color:rgba(255,255,255,0.6);margin-bottom:16px;text-shadow:0 1px 6px rgba(0,0,0,0.8);">Explora nuestros platillos y combos 👇 — ¡Disfrútalo!</p>
+    <div class="hero-kicker">JAVIER BEAR GRILL · LA CHORRERA</div>
+    <h1 style="font-family:'Oswald';font-size:clamp(25px,7vw,38px);color:#fff;font-weight:700;margin-bottom:9px;text-shadow:0 2px 16px rgba(0,0,0,0.9);line-height:1.08;">SMASH, CRUJIENTE Y HECHO AL MOMENTO 🔥</h1>
+    <p style="font-size:clamp(12px,3.5vw,15px);color:rgba(255,255,255,0.86);margin-bottom:5px;line-height:1.45;text-shadow:0 1px 8px rgba(0,0,0,0.8);">Hamburguesas smash, pollo crujiente y combos para delivery.</p>
+    <p style="font-size:clamp(10px,3vw,12px);color:rgba(255,255,255,0.66);margin-bottom:14px;text-shadow:0 1px 6px rgba(0,0,0,0.8);">Ingredientes frescos · Efectivo · Yappy · Tarjeta</p>
     <div id="heroName"  style="font-family:'Oswald';font-size:clamp(16px,4.5vw,22px);color:#fff;font-weight:700;margin-bottom:4px;text-shadow:0 2px 10px rgba(0,0,0,0.8);"></div>
     <div id="heroPrice" style="font-family:'Oswald';font-size:clamp(24px,7vw,34px);color:var(--yellow);margin-bottom:16px;text-shadow:0 0 20px rgba(255,135,50,0.6);animation:priceBlink 1.4s ease-in-out infinite;"></div>
     <div style="display:flex;gap:10px;width:100%;max-width:340px;">
-      <button id="heroBtn" onclick="heroAgregar()" style="flex:1;background:var(--yellow);color:#000;border:none;border-radius:24px;padding:12px;font-family:'Oswald';font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 15px rgba(255,135,50,0.4);">🛒 Agregar</button>
+      <button id="heroBtn" onclick="heroAgregar()" style="flex:1;background:var(--yellow);color:#000;border:none;border-radius:24px;padding:12px;font-family:'Oswald';font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 15px rgba(255,135,50,0.4);">🛒 Agregar al pedido</button>
       <button onclick="heroVerDetalle()" style="flex:1;background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.35);border-radius:24px;padding:12px;font-family:'Oswald';font-size:15px;font-weight:700;cursor:pointer;backdrop-filter:blur(6px);">📋 Ver más</button>
     </div>
   </div>
 </section>
 
+<div class="trust-strip" aria-label="Información del servicio">
+  <span class="trust-chip">🍔 Smash al momento</span>
+  <span class="trust-chip">🥬 Ingredientes frescos</span>
+  <span class="trust-chip">🚚 Solo delivery</span>
+  <span class="trust-chip">💳 Efectivo · Yappy · Tarjeta</span>
+</div>
+
 <!-- BANNER PROMO -->
 <div id="bannerPromoBar"></div>
 
-<!-- SEARCH -->
+<!-- SEARCH + CATEGORY PILLS -->
 <div id="searchWrap">
   <div class="search-container">
     <span id="searchIcon">🔍</span>
-    <input type="search" id="searchInput" placeholder="Buscar producto..." oninput="buscar(this.value)" autocomplete="off">
+    <input type="search" id="searchInput" placeholder="Buscar hamburguesas, combos, pollo..." oninput="buscar(this.value)" autocomplete="off" aria-label="Buscar en el menú">
   </div>
+  <div id="catNav" aria-label="Categorías del menú"></div>
 </div>
-
-<!-- CATEGORY PILLS -->
-<div id="catNav"></div>
 
 <!-- MENU -->
 <div id="menuContainer">
@@ -325,11 +528,15 @@
 <div id="noResults">😕 No se encontraron productos para "<span id="searchTerm"></span>"</div>
 
 <!-- FLOAT CART -->
-<button id="floatCart" onclick="document.getElementById('carrito').scrollIntoView({behavior:'smooth'})">🛒 PEDIDO (<span id="cartCount">0</span>)</button>
+<button id="floatCart" onclick="document.getElementById('carrito').scrollIntoView({behavior:'smooth'})" aria-label="Ver pedido">
+  <span class="float-cart-main">🛒 Ver pedido <span class="float-cart-count" id="cartCount">0</span></span>
+  <span class="float-cart-total" id="floatCartTotal">$0.00</span>
+</button>
 
 <!-- CARRITO -->
 <div id="carrito">
-  <h3 style="font-family:'Oswald';color:var(--yellow);margin-bottom:15px;border-bottom:1px solid var(--border);padding-bottom:8px;">TU PEDIDO</h3>
+  <h3 style="font-family:'Oswald';color:var(--yellow);margin-bottom:4px;">TU PEDIDO</h3>
+  <p style="font-size:11px;color:var(--muted);margin-bottom:15px;border-bottom:1px solid var(--border);padding-bottom:10px;">Revisa tu pedido, completa tus datos y envíalo por WhatsApp.</p>
   <div id="listaItems" style="margin-bottom:15px;"></div>
   <div style="background:var(--surface2);padding:15px;border-radius:10px;margin-bottom:15px;">
     <div style="display:flex;justify-content:space-between;margin-bottom:5px;"><span>Subtotal:</span><span id="subtotalVal">$0.00</span></div>
@@ -588,9 +795,7 @@
   </div>
   <div class="footer-schedule">
     <p class="footer-section-title">🕐 Horario de atención</p>
-    <p class="footer-hours" id="footerHorarioVie">Viernes: 3:30pm – 12:00am</p>
-    <p class="footer-hours" id="footerHorarioSab">Sábado: 1:00pm – 12:00am</p>
-    <p class="footer-hours" id="footerHorarioDom">Domingo: 1:00pm – 10:00pm</p>
+    <div id="footerHorariosLista"></div>
   </div>
   <div class="footer-promo" id="footerPromo" style="display:none;">
     <p class="footer-section-title">🔥 Promoción del momento</p>
@@ -611,7 +816,7 @@
       </div>
     </div>
   </a>
-  <p id="footerCredit">Creada por <strong>Javier el Oso</strong> con la ayuda de <strong>Claude</strong> 🤖</p>
+  <p id="footerCredit">© 2026 <strong>Javier Bear Grill</strong> · Hecho con 🔥 en La Chorrera</p>
 </footer>
 
 <script>
@@ -639,12 +844,23 @@ let csvBadgesData    = null;
 let bannerColorBg    = '#C8102E';
 let bannerColorTxt   = '#fff';
 
-let HORARIOS = {
-  5: { o:[15,30], c:[24,0], nombre:'Viernes' },
-  6: { o:[13,0],  c:[24,0], nombre:'Sábado'  },
-  0: { o:[13,0],  c:[22,0], nombre:'Domingo' },
+const HORARIOS_DEFAULT = {
+  1: { o:[15,30], c:[23,30], nombre:'Lunes'     },
+  2: { o:[15,30], c:[23,30], nombre:'Martes'    },
+  3: { o:[15,30], c:[23,30], nombre:'Miércoles' },
+  4: { o:[15,30], c:[23,30], nombre:'Jueves'    },
+  5: { o:[15,30], c:[23,30], nombre:'Viernes'   },
+  6: { o:[13,0],  c:[23,30], nombre:'Sábado'    },
+  0: { o:[13,0],  c:[23,30], nombre:'Domingo'   },
 };
-try { const h = JSON.parse(localStorage.getItem('jbg_horarios')); if (h) HORARIOS = h; } catch(e) {}
+let HORARIOS = JSON.parse(JSON.stringify(HORARIOS_DEFAULT));
+try {
+  const h = JSON.parse(localStorage.getItem('jbg_horarios'));
+  const diasGuardados = h && typeof h === 'object' ? Object.keys(h) : [];
+  // Los horarios antiguos solo tenían vie/sáb/dom. Se ignoran para no sobrescribir el horario vigente.
+  if (diasGuardados.length === 7) HORARIOS = { ...HORARIOS, ...h };
+  else if (diasGuardados.length) localStorage.removeItem('jbg_horarios');
+} catch(e) {}
 try { productosOcultos = JSON.parse(localStorage.getItem('jbg_ocultos') || '[]'); } catch(e) {}
 
 let bannerConfig = { activo:false, texto:'', emoji:'🔥', bg:'#C8102E', color:'#fff' };
@@ -944,6 +1160,7 @@ function sincronizarQtysEnPantalla() {
 function renderMenu() {
   const container = document.getElementById('menuContainer');
   container.innerHTML = '';
+  let visibleIndex = 0;
   CATEGORIAS.forEach((cat, ci) => {
     const items = cat.i.filter(item => !productosOcultos.includes(item.n));
     if (!items.length) return;
@@ -961,6 +1178,11 @@ function renderMenu() {
     const body = document.createElement('div');
     body.className = 'category-body';
     body.innerHTML = items.map(item => cardHTML(item, cat.n)).join('');
+    if (visibleIndex === 0) {
+      toggle.classList.add('open');
+      body.classList.add('open');
+    }
+    visibleIndex++;
     block.appendChild(toggle);
     block.appendChild(body);
     container.appendChild(block);
@@ -1067,7 +1289,9 @@ function buscar(query) {
     let catOk=false;
     block.querySelectorAll('.card').forEach(card => {
       const nombre=card.querySelector('.card-name')?.textContent.toLowerCase()||'';
-      const match=nombre.includes(q);
+      const descripcion=card.querySelector('.card-desc')?.textContent.toLowerCase()||'';
+      const categoria=(block.dataset.cat||'').toLowerCase();
+      const match=nombre.includes(q)||descripcion.includes(q)||categoria.includes(q);
       card.style.display=match?'':'none';
       if (match) catOk=true;
     });
@@ -1171,8 +1395,11 @@ function actualizarResumen() {
   } else {
     document.getElementById('deliveryVal').innerText = `$${precioDelivery.toFixed(2)}`;
   }
-  document.getElementById('totalVal').innerText = `$${(sub + delivery).toFixed(2)}`;
+  const total = sub + delivery;
+  document.getElementById('totalVal').innerText = `$${total.toFixed(2)}`;
   document.getElementById('cartCount').innerText = count;
+  document.getElementById('floatCartTotal').innerText = `$${total.toFixed(2)}`;
+  document.getElementById('floatCart').classList.toggle('has-items', count > 0);
 }
 
 let clienteUbicacion = null;
@@ -1537,7 +1764,7 @@ async function cargarPedidos() {
 
 function renderHorariosEditor() {
   const editor=document.getElementById('horariosEditor');
-  const dias=[0,5,6];
+  const dias=[1,2,3,4,5,6,0];
   editor.innerHTML=dias.map(d=>{
     const h=HORARIOS[d];
     const abre=`${String(h.o[0]).padStart(2,'0')}:${String(h.o[1]).padStart(2,'0')}`;
@@ -1553,7 +1780,7 @@ function renderHorariosEditor() {
 
 function guardarHorarios() {
   try {
-    [0,5,6].forEach(d=>{
+    [1,2,3,4,5,6,0].forEach(d=>{
       const abre=document.getElementById(`hor-abre-${d}`).value.split(':');
       const cierra=document.getElementById(`hor-cierra-${d}`).value.split(':');
       const cia=parseInt(cierra[0]), cim=parseInt(cierra[1]);
@@ -1567,11 +1794,29 @@ function guardarHorarios() {
 }
 
 function actualizarFooterHorarios() {
+  const cont=document.getElementById('footerHorariosLista'); if(!cont) return;
   const horaFmt=(h,m)=>`${h===12?12:h>12?h-12:h}:${String(m).padStart(2,'0')}${h<12?'am':'pm'}`;
-  const h5=HORARIOS[5], h6=HORARIOS[6], h0=HORARIOS[0];
-  const el5=document.getElementById('footerHorarioVie'); if(el5) el5.innerText=`Viernes: ${horaFmt(h5.o[0],h5.o[1])} – ${h5.c[0]===24?'12:00am':horaFmt(h5.c[0],h5.c[1])}`;
-  const el6=document.getElementById('footerHorarioSab'); if(el6) el6.innerText=`Sábado: ${horaFmt(h6.o[0],h6.o[1])} – ${h6.c[0]===24?'12:00am':horaFmt(h6.c[0],h6.c[1])}`;
-  const el0=document.getElementById('footerHorarioDom'); if(el0) el0.innerText=`Domingo: ${horaFmt(h0.o[0],h0.o[1])} – ${h0.c[0]===24?'12:00am':horaFmt(h0.c[0],h0.c[1])}`;
+  const fmt=d=>{
+    const h=HORARIOS[d];
+    return `${horaFmt(h.o[0],h.o[1])} – ${h.c[0]===24?'12:00am':horaFmt(h.c[0],h.c[1])}`;
+  };
+  const dias=[1,2,3,4,5,6,0];
+  const nombres={1:'Lunes',2:'Martes',3:'Miércoles',4:'Jueves',5:'Viernes',6:'Sábado',0:'Domingo'};
+  const grupos=[];
+  dias.forEach(d=>{
+    const firma=JSON.stringify([HORARIOS[d].o,HORARIOS[d].c]);
+    const ultimo=grupos[grupos.length-1];
+    if(ultimo&&ultimo.firma===firma) ultimo.dias.push(d);
+    else grupos.push({firma,dias:[d],horario:fmt(d)});
+  });
+  cont.innerHTML=grupos.map(g=>{
+    let etiqueta;
+    if(g.dias.length===5&&g.dias[0]===1&&g.dias[4]===5) etiqueta='Lunes a viernes';
+    else if(g.dias.length===2&&g.dias[0]===6&&g.dias[1]===0) etiqueta='Sábado y domingo';
+    else if(g.dias.length>1) etiqueta=`${nombres[g.dias[0]]} a ${nombres[g.dias[g.dias.length-1]]}`;
+    else etiqueta=nombres[g.dias[0]];
+    return `<p class="footer-hours">${etiqueta}: ${g.horario}</p>`;
+  }).join('');
 }
 
 function renderProductosToggle(filtro='') {
@@ -1710,7 +1955,11 @@ function mostrarPromoAleatoria() {
   if (!CATEGORIAS.length) return;
   const conFoto=CATEGORIAS.flatMap(c=>c.i.filter(i=>i.img&&!productosOcultos.includes(i.n)).map(i=>({...i,cat:c.n})));
   if (!conFoto.length) return;
-  footerPromoItem=conFoto[Math.floor(Math.random()*conFoto.length)];
+  const promosConFoto=CATEGORIAS
+    .filter(c=>(c.n||'').toLowerCase().includes('promoc'))
+    .flatMap(c=>c.i.filter(i=>i.img&&!productosOcultos.includes(i.n)).map(i=>({...i,cat:c.n})));
+  const destacados=promosConFoto.length?promosConFoto:conFoto;
+  footerPromoItem=destacados[Math.floor(Math.random()*destacados.length)];
   promoCard.innerHTML=`<div class="promo-card" onclick="footerAgregar()" style="cursor:pointer;">
     <img src="${footerPromoItem.img}" alt="${footerPromoItem.n}" onerror="this.style.display='none'">
     <div class="promo-info">
@@ -1720,7 +1969,7 @@ function mostrarPromoAleatoria() {
     </div>
   </div>`;
   promoDiv.style.display='';
-  heroItems=[...conFoto].sort(()=>Math.random()-0.5);
+  heroItems=[...destacados].sort(()=>Math.random()-0.5);
   heroIdx=0; mostrarHeroItem();
   if (heroTimer) clearInterval(heroTimer);
   heroTimer=setInterval(()=>{ heroIdx=(heroIdx+1)%heroItems.length; mostrarHeroItem(); }, 10*60*1000);
