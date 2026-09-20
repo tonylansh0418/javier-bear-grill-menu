@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#1a0800">
+<meta name="jbg-version" content="2.2.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="JBG Menú">
 <meta name="color-scheme" content="dark">
 <meta name="description" content="Menú oficial de Javier Bear Grill. Hamburguesas smash, pollo crujiente, combos y delivery en La Chorrera, Panamá.">
 <meta property="og:title" content="Javier Bear Grill | Menú oficial">
@@ -610,7 +614,7 @@
     </div>
     <div id="adminControls" style="display:none;">
       <div class="admin-header">
-        <div><h2>⚙️ Panel Admin</h2><p id="adminSyncInfo">Javier Bear Grill</p></div>
+        <div><h2>⚙️ Panel Admin</h2><p id="adminSyncInfo">Javier Bear Grill · v2.2.0</p></div>
         <button class="admin-close-btn" onclick="cerrarAdmin()">✕</button>
       </div>
       <div class="admin-tabs">
@@ -829,6 +833,7 @@
 // ══════════════════════════════════════════
 //  CONFIG
 // ══════════════════════════════════════════
+const APP_VERSION = '2.2.0';
 const SUPABASE_FUNC_URL = 'https://uazonbacmpwuznugirru.supabase.co/functions/v1/loyverse-menu';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVhem9uYmFjbXB3dXpudWdpcnJ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI2NDYzNTAsImV4cCI6MjA4ODIyMjM1MH0.87QkFnCL1AfI3oUu8bR2NPuUD44n3BfUX1nA-Bb360I';
 const CACHE_REST_URL    = 'https://uazonbacmpwuznugirru.supabase.co/rest/v1/menu_cache?id=eq.1&select=data,updated_at';
@@ -842,6 +847,24 @@ const CAT_ORDER = [
   'CARNE Y CERDO','Picadas','Salchipapas y HodDogs','Chorizos',
   'Acompañantes','Bebidas','SALSAS','Niños','Especiales'
 ];
+
+function displayCatName(nombre='') {
+  const n=nombre.replace(/^[\p{Emoji}\s]+/u,'').trim().toLowerCase();
+  if (n.includes('promoc')) return '🔥 Promociones';
+  if (n.includes('combo') && n.includes('hamburg')) return '🍔 Combos de hamburguesas';
+  if (n === 'hamburguesas' || n.includes('hamburguesa')) return '🍔 Hamburguesas';
+  if (n === 'pollo' || n.includes('pollo')) return '🍗 Pollo';
+  if (n.includes('carne') || n.includes('cerdo')) return '🥩 Carne y cerdo';
+  if (n.includes('picada')) return '🍽️ Picadas';
+  if (n.includes('salchipapa') || n.includes('hotdog') || n.includes('hoddog')) return '🌭 Salchipapas & Hotdogs';
+  if (n.includes('choriz')) return '🌭 Chorizos';
+  if (n.includes('acompañ')) return '🍟 Acompañantes';
+  if (n.includes('bebida')) return '🥤 Bebidas';
+  if (n.includes('salsa')) return '🥫 Salsas';
+  if (n.includes('niñ')) return '🧸 Niños';
+  if (n.includes('especial')) return '⭐ Especiales';
+  return nombre;
+}
 
 let carrito    = {};
 let CATEGORIAS = [];
@@ -1112,7 +1135,7 @@ function aplicarMenuCargado(data, updatedAt = null, guardar = true) {
   if (updatedAt) {
     const upd = new Date(updatedAt);
     const info = document.getElementById('adminSyncInfo');
-    if (info) info.innerText = `Última sync: ${upd.toLocaleDateString('es-PA')} ${upd.toLocaleTimeString('es-PA',{hour:'2-digit',minute:'2-digit'})}`;
+    if (info) info.innerText = `v${APP_VERSION} · Última sync: ${upd.toLocaleDateString('es-PA')} ${upd.toLocaleTimeString('es-PA',{hour:'2-digit',minute:'2-digit'})}`;
   }
 }
 
@@ -1200,16 +1223,19 @@ function renderMenu() {
     block.style.animationDelay = `${ci*0.04}s`;
     const toggle = document.createElement('button');
     toggle.className = 'category-toggle';
-    toggle.innerHTML = `${cat.n} <span class="arrow">▼</span>`;
+    toggle.innerHTML = `${displayCatName(cat.n)} <span class="arrow">▼</span>`;
+    toggle.setAttribute('aria-expanded','false');
     toggle.onclick = function() {
-      this.nextElementSibling.classList.toggle('open');
-      this.classList.toggle('open');
+      const abierto=this.nextElementSibling.classList.toggle('open');
+      this.classList.toggle('open',abierto);
+      this.setAttribute('aria-expanded',abierto?'true':'false');
     };
     const body = document.createElement('div');
     body.className = 'category-body';
     body.innerHTML = items.map(item => cardHTML(item, cat.n)).join('');
     if (visibleIndex === 0) {
       toggle.classList.add('open');
+      toggle.setAttribute('aria-expanded','true');
       body.classList.add('open');
     }
     visibleIndex++;
@@ -1287,7 +1313,7 @@ function renderCatNav() {
   const nav = document.getElementById('catNav');
   nav.innerHTML = CATEGORIAS
     .filter(cat => cat.i.some(item => !productosOcultos.includes(item.n)))
-    .map(cat => `<button class="cat-pill" onclick="irACat('${cat.n.replace(/'/g,"\\'")}',this)">${cat.n}</button>`)
+    .map(cat => `<button class="cat-pill" onclick="irACat('${cat.n.replace(/'/g,"\\'")}',this)" title="${cat.n.replace(/"/g,'&quot;')}">${displayCatName(cat.n)}</button>`)
     .join('');
 }
 
@@ -1297,7 +1323,7 @@ function irACat(catName, pillEl) {
   document.querySelectorAll('.category-block').forEach(block => {
     if (block.dataset.cat === catName) {
       const body=block.querySelector('.category-body'), toggle=block.querySelector('.category-toggle');
-      if (!body.classList.contains('open')) { body.classList.add('open'); toggle.classList.add('open'); }
+      if (!body.classList.contains('open')) { body.classList.add('open'); toggle.classList.add('open'); toggle.setAttribute('aria-expanded','true'); }
       setTimeout(() => block.scrollIntoView({behavior:'smooth',block:'start'}), 50);
     }
   });
@@ -2096,6 +2122,7 @@ function modalAgregar() {
 // ══════════════════════════════════════════
 //  INIT
 // ══════════════════════════════════════════
+console.info(`Javier Bear Grill Menu v${APP_VERSION}`);
 try { localStorage.removeItem('jbg_menu_v2'); sessionStorage.removeItem('jbg_menu_v2'); } catch(e) {}
 cargarCarrito();
 renderZonaSelect();
