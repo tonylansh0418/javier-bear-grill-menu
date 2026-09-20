@@ -407,9 +407,15 @@
     min-height:54px; padding:11px 16px;
     border-radius:17px;
     display:flex; align-items:center; justify-content:space-between; gap:14px;
+    opacity:0; transform:translateY(120%); pointer-events:none;
     box-shadow:0 12px 36px rgba(0,0,0,0.44);
+    transition:transform .25s ease,opacity .25s ease,box-shadow .2s;
   }
-  #floatCart.has-items { box-shadow:0 12px 38px rgba(255,135,50,0.28),0 8px 26px rgba(0,0,0,0.38); }
+  #floatCart.has-items {
+    opacity:1; transform:translateY(0); pointer-events:auto;
+    box-shadow:0 12px 38px rgba(255,135,50,0.28),0 8px 26px rgba(0,0,0,0.38);
+  }
+  .category-block { scroll-margin-top:138px; }
   .float-cart-main { display:flex; align-items:center; gap:8px; }
   .float-cart-count {
     min-width:24px; height:24px; padding:0 7px;
@@ -486,7 +492,7 @@
   <span itemprop="address" style="display:none">Residencial La Valdeza, Calle Boulevard, Casa 173, La Chorrera, Panamá</span>
   <span itemprop="telephone" style="display:none">+507 6573-8924</span>
   <span itemprop="servesCuisine" style="display:none">Hamburguesas, Pollo, Parrilla, Combos</span>
-  <img id="heroImg" src="" alt="" style="width:100%;aspect-ratio:1/1;object-fit:cover;display:block;opacity:0;transition:opacity 0.6s ease;">
+  <img id="heroImg" src="" alt="" decoding="async" fetchpriority="high" style="width:100%;aspect-ratio:1/1;object-fit:cover;display:block;opacity:0;transition:opacity 0.6s ease;">
   <div class="hero-shade"></div>
   <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px;text-align:center;">
     <div class="hero-kicker">JAVIER BEAR GRILL · LA CHORRERA</div>
@@ -543,8 +549,8 @@
     <div style="display:flex;justify-content:space-between;margin-bottom:5px;"><span>Delivery:</span><span id="deliveryVal">$0.00</span></div>
     <div style="display:flex;justify-content:space-between;font-weight:800;font-size:20px;color:var(--yellow);margin-top:5px;border-top:1px solid var(--border);padding-top:8px;"><span>TOTAL:</span><span id="totalVal">$0.00</span></div>
   </div>
-  <div class="form-group"><label>Nombre</label><input type="text" id="nombre" placeholder="Tu nombre"></div>
-  <div class="form-group"><label>Dirección de entrega</label><input type="text" id="direccion" placeholder="Ej: Calle 5, Casa 12, frente al parque"></div>
+  <div class="form-group"><label for="nombre">Nombre</label><input type="text" id="nombre" placeholder="Tu nombre" autocomplete="name"></div>
+  <div class="form-group"><label for="direccion">Dirección de entrega</label><input type="text" id="direccion" placeholder="Ej: Calle 5, Casa 12, frente al parque" autocomplete="street-address"></div>
   <div class="form-group">
     <label>Zona de Entrega</label>
     <select id="zona" onchange="actualizarResumen()"></select>
@@ -827,8 +833,8 @@ const SUPABASE_FUNC_URL = 'https://uazonbacmpwuznugirru.supabase.co/functions/v1
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVhem9uYmFjbXB3dXpudWdpcnJ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI2NDYzNTAsImV4cCI6MjA4ODIyMjM1MH0.87QkFnCL1AfI3oUu8bR2NPuUD44n3BfUX1nA-Bb360I';
 const CACHE_REST_URL    = 'https://uazonbacmpwuznugirru.supabase.co/rest/v1/menu_cache?id=eq.1&select=data,updated_at';
 const PEDIDOS_REST_URL  = 'https://uazonbacmpwuznugirru.supabase.co/rest/v1/pedidos';
-const CACHE_KEY         = 'jbg_menu_v2';
-const CACHE_TTL         = 24 * 60 * 60 * 1000;
+const CACHE_KEY         = 'jbg_menu_v3';
+const CACHE_TTL         = 10 * 60 * 1000; // 10 min: precios mucho más frescos sin ralentizar la primera carga
 const ADMIN_PASS        = 'javier2026';
 
 const CAT_ORDER = [
@@ -1094,39 +1100,63 @@ function aplicarBannerGuardado() {
 // ══════════════════════════════════════════
 //  CARGAR MENÚ
 // ══════════════════════════════════════════
+function aplicarMenuCargado(data, updatedAt = null, guardar = true) {
+  let finalData = data;
+  const badgesGuardados = JSON.parse(localStorage.getItem('jbg_badges') || 'null');
+  if (badgesGuardados) finalData = aplicarBadgesAData(data, badgesGuardados);
+  CATEGORIAS = sortCats(finalData);
+  if (guardar) {
+    try { localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data })); } catch(e) {}
+  }
+  renderMenu(); renderCatNav(); mostrarPromoAleatoria(); sincronizarQtysEnPantalla();
+  if (updatedAt) {
+    const upd = new Date(updatedAt);
+    const info = document.getElementById('adminSyncInfo');
+    if (info) info.innerText = `Última sync: ${upd.toLocaleDateString('es-PA')} ${upd.toLocaleTimeString('es-PA',{hour:'2-digit',minute:'2-digit'})}`;
+  }
+}
+
+async function obtenerMenuRemoto() {
+  const res = await fetch(CACHE_REST_URL + '&apikey=' + SUPABASE_ANON_KEY, { cache:'no-store' });
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  const rows = await res.json();
+  if (!rows.length || !Array.isArray(rows[0].data) || !rows[0].data.length) throw new Error('Caché vacía');
+  return rows[0];
+}
+
 async function cargarMenu(forzar = false) {
   const container = document.getElementById('menuContainer');
+  let cacheMostrado = false;
+
   if (!forzar) {
     try {
       const raw = localStorage.getItem(CACHE_KEY) || sessionStorage.getItem(CACHE_KEY);
       if (raw) {
         const { ts, data } = JSON.parse(raw);
-        if (Date.now() - ts < CACHE_TTL) {
-          CATEGORIAS = sortCats(data);
-          renderMenu(); renderCatNav(); mostrarPromoAleatoria();
-          return;
+        if (Array.isArray(data) && data.length) {
+          aplicarMenuCargado(data, null, false);
+          cacheMostrado = true;
+          if (Date.now() - ts < CACHE_TTL) return;
         }
       }
-    } catch(e) { localStorage.removeItem(CACHE_KEY); sessionStorage.removeItem(CACHE_KEY); }
-  }
-  container.innerHTML = '<div id="loadingMsg"><span class="spinner"></span>Cargando menú...</div>';
-  try {
-    const res = await fetch(CACHE_REST_URL + '&apikey=' + SUPABASE_ANON_KEY);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const rows = await res.json();
-    if (!rows.length || !Array.isArray(rows[0].data) || !rows[0].data.length) throw new Error('Caché vacía');
-    let data = rows[0].data;
-    const badgesGuardados = JSON.parse(localStorage.getItem('jbg_badges') || 'null');
-    if (badgesGuardados) data = aplicarBadgesAData(data, badgesGuardados);
-    CATEGORIAS = sortCats(data);
-    try { localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data })); } catch(e) {}
-    renderMenu(); renderCatNav(); mostrarPromoAleatoria(); sincronizarQtysEnPantalla();
-    if (rows[0].updated_at) {
-      const upd = new Date(rows[0].updated_at);
-      document.getElementById('adminSyncInfo').innerText = `Última sync: ${upd.toLocaleDateString('es-PA')} ${upd.toLocaleTimeString('es-PA',{hour:'2-digit',minute:'2-digit'})}`;
+    } catch(e) {
+      localStorage.removeItem(CACHE_KEY);
+      sessionStorage.removeItem(CACHE_KEY);
     }
+  }
+
+  if (!cacheMostrado) {
+    container.innerHTML = '<div id="loadingMsg"><span class="spinner"></span>Cargando menú...</div>';
+  }
+
+  try {
+    const row = await obtenerMenuRemoto();
+    aplicarMenuCargado(row.data, row.updated_at, true);
   } catch(e) {
-    container.innerHTML = `<div id="loadingMsg" style="color:var(--red)">⚠️ No se pudo cargar el menú.<br><small>${e.message}</small></div>`;
+    // Si ya mostramos una copia local, la conservamos: el cliente puede seguir usando el menú.
+    if (!cacheMostrado) {
+      container.innerHTML = `<div id="loadingMsg" style="color:var(--red)">⚠️ No se pudo cargar el menú.<br><small>${e.message}</small></div>`;
+    }
   }
 }
 
@@ -1203,7 +1233,7 @@ function cardHTML(item, cat) {
     return `<div class="card has-img" data-n="${nameEsc}" data-p="${item.p}" data-img="${item.img}" data-d="${descClean}" data-cat="${catClean}">
       <div class="img-wrap" style="cursor:pointer" onclick="abrirModalDesdeCard(this.closest('.card'))">
         <div class="img-placeholder"></div>
-        <img class="card-img" data-src="${item.img}" alt="${nameEsc}"
+        <img class="card-img" data-src="${item.img}" alt="${nameEsc}" decoding="async"
           onload="this.classList.add('loaded');this.previousElementSibling.style.opacity='0';setTimeout(()=>this.previousElementSibling.classList.add('hidden'),400)"
           onerror="this.closest('.card').classList.remove('has-img');this.closest('.img-wrap').remove()">
       </div>
@@ -1972,7 +2002,7 @@ function mostrarPromoAleatoria() {
   heroItems=[...destacados].sort(()=>Math.random()-0.5);
   heroIdx=0; mostrarHeroItem();
   if (heroTimer) clearInterval(heroTimer);
-  heroTimer=setInterval(()=>{ heroIdx=(heroIdx+1)%heroItems.length; mostrarHeroItem(); }, 10*60*1000);
+  heroTimer=setInterval(()=>{ heroIdx=(heroIdx+1)%heroItems.length; mostrarHeroItem(); }, 18000);
 }
 
 function mostrarHeroItem() {
@@ -2003,7 +2033,7 @@ function heroAgregar() {
   const btn=document.getElementById('floatCart'); btn.classList.remove('bump'); void btn.offsetWidth; btn.classList.add('bump');
   const heroBtn=document.getElementById('heroBtn');
   heroBtn.innerText='✓ Agregado'; heroBtn.style.background='#25D366';
-  setTimeout(()=>{ heroBtn.innerText='🛒 Agregar'; heroBtn.style.background=''; },1500);
+  setTimeout(()=>{ heroBtn.innerText='🛒 Agregar al pedido'; heroBtn.style.background=''; },1500);
 }
 
 function footerAgregar() {
@@ -2066,6 +2096,7 @@ function modalAgregar() {
 // ══════════════════════════════════════════
 //  INIT
 // ══════════════════════════════════════════
+try { localStorage.removeItem('jbg_menu_v2'); sessionStorage.removeItem('jbg_menu_v2'); } catch(e) {}
 cargarCarrito();
 renderZonaSelect();
 cargarMenu();
